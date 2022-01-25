@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.boomerang312.pos-terminal">
+    package="com.boomerang_delivery.pos_terminal">
    <application
         android:label="boomerang_pos"
         android:name="${applicationName}"
