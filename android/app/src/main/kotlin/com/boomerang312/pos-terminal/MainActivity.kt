@@ -1,4 +1,4 @@
-package com.example.boomerang_pos
+package com.boomerang312.pos-terminal
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,7 +1,6 @@
-import 'package:esc_pos_utils/esc_pos_utils.dart';
+import 'package:boomerang_pos/SSE.dart';
 import 'package:flutter/material.dart';
-import 'package:esc_pos_printer/esc_pos_printer.dart';
-import 'package:flutter_sunmi_printer/flutter_sunmi_printer.dart';
+// import 'package:flutter_sunmi_printer/flutter_sunmi_printer.dart';
 
 void main() {
   runApp(const MyApp());
@@ -51,66 +50,30 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  // int _counter = 0;
-
-  void testReceipt(NetworkPrinter printer) {
-    printer.text(
-        'Regular: aA bB cC dD eE fF gG hH iI jJ kK lL mM nN oO pP qQ rR sS tT uU vV wW xX yY zZ');
-    printer.text('Special 1: àÀ èÈ éÉ ûÛ üÜ çÇ ôÔ',
-        styles: const PosStyles(codeTable: 'CP1252'));
-    printer.text('Special 2: blåbærgrød',
-        styles: const PosStyles(codeTable: 'CP1252'));
-
-    printer.text('Bold text', styles: const PosStyles(bold: true));
-    printer.text('Reverse text', styles: const PosStyles(reverse: true));
-    printer.text('Underlined text',
-        styles: const PosStyles(underline: true), linesAfter: 1);
-    printer.text('Align left', styles: const PosStyles(align: PosAlign.left));
-    printer.text('Align center',
-        styles: const PosStyles(align: PosAlign.center));
-    printer.text('Align right',
-        styles: const PosStyles(align: PosAlign.right), linesAfter: 1);
-
-    printer.text('Text size 200%',
-        styles: const PosStyles(
-          height: PosTextSize.size2,
-          width: PosTextSize.size2,
-        ));
-
-    printer.feed(2);
-    printer.cut();
+  void _incrementCounter() async {
+    // SunmiPrinter.hr(); // prints a full width separator
+    // SunmiPrinter.text(
+    //   'Test Sunmi Printer',
+    //   styles: const SunmiStyles(align: SunmiAlign.center),
+    // );
+    // SunmiPrinter.hr();
+    testSse();
   }
 
-  void _incrementCounter() async {
-    // setState(() {
-    //   // This call to setState tells the Flutter framework that something has
-    //   // changed in this State, which causes it to rerun the build method below
-    //   // so that the display can reflect the updated values. If we changed
-    //   // _counter without calling setState(), then the build method would not be
-    //   // called again, and so nothing would appear to happen.
-    //   _counter++;
-    // });
+  void testSse() {
+    Stream<dynamic> myStream = Sse.connect(
+      uri: Uri.parse(
+          'http://localhost:8080/elastic/services/ws/subscribe/<clientId>'),
+      closeOnError: true,
+      withCredentials: false,
+    ).stream;
 
-    // const PaperSize paper = PaperSize.mm80;
-    // final profile = await CapabilityProfile.load();
-    // final printer = NetworkPrinter(paper, profile);
-
-    // final PosPrintResult res =
-    //     await printer.connect('192.168.0.123', port: 9100);
-
-    // if (res == PosPrintResult.success) {
-    //   testReceipt(printer);
-    //   printer.disconnect();
-    // }
-
-    // print('Print result: ${res.msg}');
-
-    SunmiPrinter.hr(); // prints a full width separator
-    SunmiPrinter.text(
-      'Test Sunmi Printer',
-      styles: const SunmiStyles(align: SunmiAlign.center),
-    );
-    SunmiPrinter.hr();
+    myStream.listen((event) {
+      print('Received:' +
+          DateTime.now().millisecondsSinceEpoch.toString() +
+          ' : ' +
+          event.toString());
+    });
   }
 
   @override
