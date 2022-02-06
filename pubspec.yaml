@@ -27,10 +27,19 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  cloud_firestore: ^3.1.6
   cupertino_icons: ^1.0.2
+  esc_pos_utils: ^1.1.0
+  firebase_analytics: ^9.0.5
+  firebase_auth: ^3.3.5
+  firebase_core: ^1.11.0
+  firebase_crashlytics: ^2.4.5
+  firebase_messaging: ^11.2.6
   flutter:
     sdk: flutter
-  flutter_sunmi_printer: ^0.2.1
+  flutterfire_ui: ^0.3.2
+  google_sign_in: ^5.2.3
+  sunmi_printer_plus: ^2.0.11
   universal_html: ^2.0.8
 
 dev_dependencies:

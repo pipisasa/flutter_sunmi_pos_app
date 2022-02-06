@@ -1,8 +1,68 @@
-import 'package:boomerang_pos/SSE.dart';
+import 'package:boomerang_pos/constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_sunmi_printer/flutter_sunmi_printer.dart';
 
-void main() {
+// Printer
+// import 'package:flutter_sunmi_printer/flutter_sunmi_printer.dart';
+import 'package:boomerang_pos/SSE.dart';
+
+// Firebase
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutterfire_ui/auth.dart';
+import 'package:flutterfire_ui/firestore.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'firebase_options.dart';
+import 'package:esc_pos_utils/esc_pos_utils.dart';
+import 'package:sunmi_printer_plus/sunmi_printer_plus.dart';
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp();
+
+  // print("Handling a background message: ${message.messageId}");
+  final bool? isPrinterBind = await SunmiPrinter.bindingPrinter();
+  final int paperSize = await SunmiPrinter.paperSize();
+  final String printerVersion = await SunmiPrinter.printerVersion();
+  final String printerSerialNumber = await SunmiPrinter.serialNumber();
+
+  if (message.data.containsKey('orderId')) {
+    print("Order ID: ${message.data['orderId']}");
+    print(message.data);
+
+    await SunmiPrinter.initPrinter();
+    await SunmiPrinter.startTransactionPrint(true);
+
+    await SunmiPrinter.line();
+
+    await SunmiPrinter.printText(message.data['text'],
+        style: SunmiStyle(fontSize: SunmiFontSize.MD));
+    await SunmiPrinter.lineWrap(2);
+
+    await SunmiPrinter.printQRCode(message.data['orderId']);
+    await SunmiPrinter.lineWrap(2);
+
+    await SunmiPrinter.printBarCode(message.data['orderId'],
+        barcodeType: SunmiBarcodeType.CODE128,
+        textPosition: SunmiBarcodeTextPos.TEXT_UNDER,
+        height: 20);
+    await SunmiPrinter.lineWrap(2);
+
+    await SunmiPrinter.exitTransactionPrint(true);
+  }
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  // await SunmiPrinter.bindingPrinter();
+  await FirebaseMessaging.instance.subscribeToTopic('pos-terminal');
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(const MyApp());
 }
 
@@ -14,6 +74,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -24,9 +85,9 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.blue,
+        primarySwatch: limeGreen,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Boomerang POS Terminal'),
     );
   }
 }
@@ -50,31 +111,45 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  void _incrementCounter() async {
-    // SunmiPrinter.hr(); // prints a full width separator
-    // SunmiPrinter.text(
-    //   'Test Sunmi Printer',
-    //   styles: const SunmiStyles(align: SunmiAlign.center),
-    // );
-    // SunmiPrinter.hr();
-    testSse();
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  User? _user;
+  bool isUserAuth = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    FirebaseAnalytics.instance.logAppOpen();
+    _listenAuthState();
+    _initMessaging();
   }
 
-  void testSse() {
-    Stream<dynamic> myStream = Sse.connect(
-      uri: Uri.parse(
-          'http://localhost:8080/elastic/services/ws/subscribe/<clientId>'),
-      closeOnError: true,
-      withCredentials: false,
-    ).stream;
-
-    myStream.listen((event) {
-      print('Received:' +
-          DateTime.now().millisecondsSinceEpoch.toString() +
-          ' : ' +
-          event.toString());
+  _listenAuthState() {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      setState(() {
+        _user = user;
+        isUserAuth = user != null;
+      });
     });
   }
+
+  Future<void> _initMessaging() async {
+    NotificationSettings settings =
+        await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    print('User granted permission: ${settings.authorizationStatus}');
+  }
+
+  void _onPressed() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -85,43 +160,19 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              'Hello',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+        title: Text(
+          widget.title,
+          style: const TextStyle(color: Colors.white),
         ),
+        backgroundColor: darkBlue.shade900,
       ),
+      body: Container(),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: _onPressed,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.

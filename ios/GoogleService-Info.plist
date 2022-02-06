@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>163312496929-paja8b534stvcvqkvv5d4licn38jg8rd.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.163312496929-paja8b534stvcvqkvv5d4licn38jg8rd</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>163312496929-6boic2t04e7std564bqi3tdf4f7ms2gn.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCPD4uKHY9Q6Aam2vouluAvC3RXQacatzY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>163312496929</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.boomerang-delivery.pos-terminal</string>
+	<key>PROJECT_ID</key>
+	<string>boomerang-c2222</string>
+	<key>STORAGE_BUCKET</key>
+	<string>boomerang-c2222.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false/>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false/>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true/>
+	<key>IS_GCM_ENABLED</key>
+	<true/>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true/>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:163312496929:ios:886eeabc21f4dbb6bf4e60</string>
+</dict>
+</plist>
