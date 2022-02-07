@@ -127,17 +127,14 @@ class RowPrinterOutput extends PrinterOutput {
       : super(type: PrinterOutputType.row);
 
   factory RowPrinterOutput.fromJson(Map<String, dynamic> json) {
-    List<ColumnMaker> _columns = [];
-    if (json['columns'].runtimeType == List) {
-      json['columns'].forEach((col) {
-        _columns.add(ColumnMaker(
-          text: col['text'],
-          width: col['width'] ?? 2,
-          align: aligns[col['align']] ?? SunmiPrintAlign.LEFT,
-        ));
-      });
-    }
-    return RowPrinterOutput(columns: _columns);
+    return RowPrinterOutput(
+        columns: (json['columns'] as List<Map<String, dynamic>>)
+            .map<ColumnMaker>((col) => ColumnMaker(
+                  text: col['text'],
+                  width: col['width'] ?? 2,
+                  align: aligns[col['align']] ?? SunmiPrintAlign.LEFT,
+                ))
+            .toList());
   }
 
   static const Map<String, SunmiPrintAlign> aligns = {
