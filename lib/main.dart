@@ -24,10 +24,10 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
 
   // print("Handling a background message: ${message.messageId}");
-  // final bool? isPrinterBind = await SunmiPrinter.bindingPrinter();
-  // final int paperSize = await SunmiPrinter.paperSize();
-  // final String printerVersion = await SunmiPrinter.printerVersion();
-  // final String printerSerialNumber = await SunmiPrinter.serialNumber();
+  final bool? isPrinterBind = await SunmiPrinter.bindingPrinter();
+  final int paperSize = await SunmiPrinter.paperSize();
+  final String printerVersion = await SunmiPrinter.printerVersion();
+  final String printerSerialNumber = await SunmiPrinter.serialNumber();
 
   if (message.data['type'] == 'pos-terminal' ||
       message.from == 'pos-terminal') {
