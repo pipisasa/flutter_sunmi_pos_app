@@ -32,7 +32,10 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (message.data['type'] == 'pos-terminal' ||
       message.from == 'pos-terminal') {
     final POSNotificationData data = POSNotificationData(
-      printerOuputDataJson: jsonDecode(message.data['printerOuputData']),
+      printerOuputDataJson:
+          (jsonDecode(message.data['printerOuputData']) as List)
+              .map((e) => e as Map<String, dynamic>)
+              .toList(),
       notificationTitle: message.notification?.title,
       notificationBody: message.notification?.body,
     );
