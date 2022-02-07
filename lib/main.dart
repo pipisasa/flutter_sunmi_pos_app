@@ -1,22 +1,20 @@
-import 'package:boomerang_pos/constants.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
-
-// Printer
-// import 'package:flutter_sunmi_printer/flutter_sunmi_printer.dart';
-import 'package:boomerang_pos/SSE.dart';
-
 // Firebase
+import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutterfire_ui/auth.dart';
-import 'package:flutterfire_ui/firestore.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'firebase_options.dart';
-import 'package:esc_pos_utils/esc_pos_utils.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:flutterfire_ui/auth.dart';
+// import 'package:flutterfire_ui/firestore.dart';
+// import 'package:google_sign_in/google_sign_in.dart';
+
+// Printer
 import 'package:sunmi_printer_plus/sunmi_printer_plus.dart';
+import 'package:boomerang_pos/printer_utils/printer_output.dart';
+
+import 'package:boomerang_pos/constants.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
@@ -29,28 +27,25 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   final String printerVersion = await SunmiPrinter.printerVersion();
   final String printerSerialNumber = await SunmiPrinter.serialNumber();
 
-  if (message.data.containsKey('orderId')) {
-    print("Order ID: ${message.data['orderId']}");
-    print(message.data);
-
+  if (message.data['type'] == 'pos-terminal' ||
+      message.from == '/topics/pos-terminal') {
+    final POSNotificationData data = POSNotificationData(
+      printerOuputDataJson: message.data['printerOuputData'],
+      notificationTitle: message.notification?.title,
+      notificationBody: message.notification?.body,
+    );
     await SunmiPrinter.initPrinter();
     await SunmiPrinter.startTransactionPrint(true);
-
     await SunmiPrinter.line();
 
-    await SunmiPrinter.printText(message.data['text'],
-        style: SunmiStyle(fontSize: SunmiFontSize.MD));
-    await SunmiPrinter.lineWrap(2);
+    for (PrinterOutput printerOutput in data.printerOuputData) {
+      // await printerOutput.printData();
+      await printerOutput.printDataWithLogs();
+    }
 
-    await SunmiPrinter.printQRCode(message.data['orderId']);
     await SunmiPrinter.lineWrap(2);
-
-    await SunmiPrinter.printBarCode(message.data['orderId'],
-        barcodeType: SunmiBarcodeType.CODE128,
-        textPosition: SunmiBarcodeTextPos.TEXT_UNDER,
-        height: 20);
-    await SunmiPrinter.lineWrap(2);
-
+    await SunmiPrinter.line();
+    await SunmiPrinter.cut();
     await SunmiPrinter.exitTransactionPrint(true);
   }
 }
@@ -178,4 +173,18 @@ class _MyHomePageState extends State<MyHomePage> {
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+}
+
+class POSNotificationData {
+  final List<PrinterOutput> printerOuputData;
+  final String? notificationTitle;
+  final String? notificationBody;
+
+  POSNotificationData({
+    required List<Map<String, dynamic>> printerOuputDataJson,
+    this.notificationTitle,
+    this.notificationBody,
+  }) : printerOuputData = printerOuputDataJson
+            .map((Map<String, dynamic> data) => PrinterOutput.fromJson(data))
+            .toList();
 }
