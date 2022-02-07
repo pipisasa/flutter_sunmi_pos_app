@@ -41,12 +41,16 @@ abstract class PrinterOutput {
 
   PrinterOutput({required this.type});
 
-  Future<void> printDataWithLogs() {
+  Future<void> printDataWithLogs() async {
     print('Printing $runtimeType $type');
 
     print(toJson());
 
-    return printData();
+    try {
+      var data = await printData();
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<void> printData();
@@ -108,8 +112,9 @@ class TextPrinterOutput extends PrinterOutput {
     return {
       'type': 'text',
       'text': text,
-      'fontSize': fontSizes.values.firstWhere((val) => val == fontSize),
-      'align': aligns.values.firstWhere((val) => val == align),
+      'fontSize':
+          fontSizes.keys.firstWhere((key) => fontSizes[key] == fontSize),
+      'align': aligns.keys.firstWhere((key) => aligns[key] == align),
       'isBold': isBold,
     };
   }
@@ -152,7 +157,14 @@ class RowPrinterOutput extends PrinterOutput {
   Map<String, dynamic> toJson() {
     return {
       'type': 'row',
-      'columns': columns.map((col) => col.toJson()).toList(),
+      'columns': columns
+          .map((col) => ({
+                'text': col.text,
+                'width': col.width,
+                'align':
+                    aligns.keys.firstWhere((key) => aligns[key] == col.align),
+              }))
+          .toList(),
     };
   }
 }
@@ -196,7 +208,8 @@ class QRCodePrinterOutput extends PrinterOutput {
       'type': 'qrCode',
       'text': text,
       'size': size,
-      'errorLevel': qrErrorLevels.values.firstWhere((val) => val == errorLevel),
+      'errorLevel': qrErrorLevels.keys
+          .firstWhere((key) => qrErrorLevels[key] == errorLevel),
     };
   }
 }
@@ -263,12 +276,12 @@ class BarCodePrinterOutput extends PrinterOutput {
     return {
       'type': 'barcode',
       'text': text,
-      'barcodeType':
-          barcodeTypes.values.firstWhere((val) => val == barcodeType),
+      'barcodeType': barcodeTypes.keys
+          .firstWhere((key) => barcodeTypes[key] == barcodeType),
       'height': height,
       'width': width,
-      'textPosition':
-          textPositions.values.firstWhere((val) => val == textPosition),
+      'textPosition': textPositions.keys
+          .firstWhere((key) => textPositions[key] == textPosition),
     };
   }
 }
