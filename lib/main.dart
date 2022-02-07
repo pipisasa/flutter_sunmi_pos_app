@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 // Firebase
 import 'firebase_options.dart';
@@ -30,7 +32,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (message.data['type'] == 'pos-terminal' ||
       message.from == '/topics/pos-terminal') {
     final POSNotificationData data = POSNotificationData(
-      printerOuputDataJson: message.data['printerOuputData'],
+      printerOuputDataJson: jsonDecode(message.data['printerOuputData']),
       notificationTitle: message.notification?.title,
       notificationBody: message.notification?.body,
     );
