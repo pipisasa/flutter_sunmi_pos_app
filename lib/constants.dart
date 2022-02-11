@@ -29,3 +29,9 @@ const limeGreen = MaterialColor(_limeGreenPrimaryValue, {
   800: Color(0xFF859900), //#859900
   900: Color(0xFF6e7300), //#6e7300
 });
+
+const Color primaryColor = Color(0xFFF67952);
+const Color bgColor = Color(0xFFFBFBFD);
+
+const double defaultPadding = 16.0;
+const double defaultBorderRaius = 12.0;
