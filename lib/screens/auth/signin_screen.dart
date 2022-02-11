@@ -1,25 +1,11 @@
+import 'dart:async';
+
+import 'package:boomerang_pos/constants.dart';
 import 'package:boomerang_pos/screens/home/home_screen.dart';
+import 'package:boomerang_pos/services/auth/firebase_auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-
-Future<UserCredential> signInWithGoogle() async {
-  // Trigger the authentication flow
-  final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-  // Obtain the auth details from the request
-  final GoogleSignInAuthentication? googleAuth =
-      await googleUser?.authentication;
-
-  // Create a new credential
-  final credential = GoogleAuthProvider.credential(
-    accessToken: googleAuth?.accessToken,
-    idToken: googleAuth?.idToken,
-  );
-
-  // Once signed in, return the UserCredential
-  return await FirebaseAuth.instance.signInWithCredential(credential);
-}
+import 'package:get_it/get_it.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -29,68 +15,112 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseAuthService _firebaseAuthService =
+      GetIt.I<FirebaseAuthService>();
+  StreamSubscription? _userSubscription;
+  bool _loading = false;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user == null) {
-        // ignore: avoid_print
-        print('User is currently signed out!');
-      } else {
-        // ignore: avoid_print
-        print('User is signed in!');
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()));
+    _userSubscription = _firebaseAuthService.onAuthStateChanged.listen((user) {
+      if (user != null) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const HomeScreen(),
+          ),
+        );
       }
     });
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _userSubscription?.cancel();
+  }
+
+  Future<void> _signInWithGoogle() async {
+    setState(() {
+      _loading = true;
+    });
+    User? user = await _firebaseAuthService.signInWithGoogle();
+    if (user != null) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const HomeScreen(),
+        ),
+      );
+      return;
+    }
+    setState(() {
+      _loading = false;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // Loader
+    if (_loading) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        // leading: IconButton(
-        //   onPressed: () {},
-        //   icon: SvgPicture.asset(
-        //     'assets/icons/menu.svg',
-        //     width: 25,
-        //   ),
-        // ),
         title: Text(
-          'Войти через Google',
+          'Войдите в свой аккаунт',
           style: Theme.of(context).textTheme.subtitle2!.copyWith(
                 fontSize: 18,
               ),
         ),
-        // actions: [
-        //   IconButton(
-        //     onPressed: () {},
-        //     icon: SvgPicture.asset(
-        //       'assets/icons/bell.svg',
-        //       width: 25,
-        //     ),
-        //   )
-        // ],
       ),
-      body: Center(
-        child: Column(
-          children: [
-            Image.asset(
-              'assets/images/login.png',
-              width: double.infinity,
-            ),
-            ElevatedButton(
-              child: Text('Sign In'),
-              onPressed: () {
-                signInWithGoogle();
-              },
-            )
-          ],
+      body: Padding(
+        padding: const EdgeInsets.all(defaultPadding),
+        child: Center(
+          child: Column(
+            children: [
+              Image.asset(
+                'assets/images/login.png',
+                width: double.infinity,
+              ),
+              ElevatedButton(
+                child: const Text('Войти через Google'),
+                onPressed: _signInWithGoogle,
+              ),
+              const SizedBox(height: defaultPadding / 2),
+              Text(
+                'Или',
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+              const SizedBox(height: defaultPadding / 2),
+              Form(
+                child: Column(
+                  children: [
+                    TextFormField(
+                      decoration: const InputDecoration(
+                        labelText: 'Имя пользователя',
+                      ),
+                    ),
+                    TextFormField(
+                      decoration: const InputDecoration(
+                        labelText: 'Пароль',
+                      ),
+                    ),
+                    const SizedBox(height: defaultPadding / 2),
+                    ElevatedButton(
+                      child: const Text('Войти'),
+                      onPressed: () {},
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

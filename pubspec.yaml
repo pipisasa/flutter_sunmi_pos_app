@@ -27,24 +27,21 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  # The Flutter SDK.
-  flutter:
-    sdk: flutter
-  cupertino_icons: ^1.0.2
-  flutter_svg: ^1.0.3
-
-  # Firebase
+  cached_network_image: ^3.2.0
   cloud_firestore: ^3.1.6
+  cupertino_icons: ^1.0.2
+  esc_pos_utils: ^1.1.0
   firebase_analytics: ^9.0.5
   firebase_auth: ^3.3.5
   firebase_core: ^1.11.0
   firebase_crashlytics: ^2.4.5
   firebase_messaging: ^11.2.6
+  flutter:
+    sdk: flutter
+  flutter_svg: ^1.0.3
   flutterfire_ui: ^0.3.2
+  get_it: ^7.2.0
   google_sign_in: ^5.2.3
-
-  # Printer Utils
-  esc_pos_utils: ^1.1.0
   sunmi_printer_plus: ^2.0.11
 
 dev_dependencies:
@@ -84,6 +81,5 @@ flutter:
           weight: 700
         - asset: assets/fonts/Roboto/Roboto-Light.ttf
           weight: 300
-  #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

@@ -1,7 +1,9 @@
 import 'dart:convert';
-import 'package:boomerang_pos/screens/auth/signin_screen.dart';
 import 'package:boomerang_pos/screens/home/home_screen.dart';
+import 'package:boomerang_pos/services/auth/firebase_auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
 
 // Firebase
 import 'firebase_options.dart';
@@ -65,6 +67,14 @@ void main() async {
   // await SunmiPrinter.bindingPrinter();
   await FirebaseMessaging.instance.subscribeToTopic('pos-terminal');
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  GetIt.I.registerSingleton<FirebaseAuthService>(FirebaseAuthService());
+
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
   runApp(const MyApp());
 }
 
@@ -92,7 +102,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: limeGreen,
           textTheme:
               const TextTheme(bodyText2: TextStyle(color: Colors.black54))),
-      home: SignInScreen(),
+      home: const HomeScreen(),
     );
   }
 }

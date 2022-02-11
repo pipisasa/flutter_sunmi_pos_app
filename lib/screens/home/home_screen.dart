@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:boomerang_pos/constants.dart';
 import 'package:boomerang_pos/screens/auth/signin_screen.dart';
+import 'package:boomerang_pos/services/auth/firebase_auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get_it/get_it.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -12,20 +16,32 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  FirebaseAuthService firebaseAuthService = GetIt.I<FirebaseAuthService>();
   User? _user;
+  StreamSubscription? _userSubscription;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+    _userSubscription = firebaseAuthService.onAuthStateChanged.listen((user) {
       if (user == null) {
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const SignInScreen()));
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const SignInScreen(),
+          ),
+        );
       } else {
-        _user = user;
+        setState(() {
+          _user = user;
+        });
       }
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _userSubscription?.cancel();
   }
 
   @override
