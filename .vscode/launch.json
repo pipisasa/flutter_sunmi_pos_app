@@ -5,12 +5,12 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "boomerang_pos",
+      "name": "Boomerang POS",
       "request": "launch",
       "type": "dart"
     },
     {
-      "name": "boomerang_pos (profile mode)",
+      "name": "Boomerang POS (profile mode)",
       "request": "launch",
       "type": "dart",
       "flutterMode": "profile"

@@ -1,6 +1,6 @@
 {
-    "name": "boomerang_pos",
-    "short_name": "boomerang_pos",
+    "name": "Boomerang POS",
+    "short_name": "Boomerang POS",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
