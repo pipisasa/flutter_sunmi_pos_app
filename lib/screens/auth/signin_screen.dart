@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:boomerang_pos/components/sign_in_form.dart';
+import 'package:boomerang_pos/components/text_field_container.dart';
 import 'package:boomerang_pos/constants.dart';
 import 'package:boomerang_pos/screens/home/home_screen.dart';
 import 'package:boomerang_pos/services/auth/firebase_auth_service.dart';
@@ -58,6 +60,28 @@ class _SignInScreenState extends State<SignInScreen> {
     });
   }
 
+  Future<void> _signInWithEmailAndPassword(
+      String email, String password) async {
+    setState(() {
+      _loading = true;
+    });
+    User? user = await _firebaseAuthService.signInWithEmailAndPassword(
+      email,
+      password,
+    );
+    if (user != null) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const HomeScreen(),
+        ),
+      );
+      return;
+    }
+    setState(() {
+      _loading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // Loader
@@ -73,24 +97,33 @@ class _SignInScreenState extends State<SignInScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text(
-          'Войдите в свой аккаунт',
+          'Добро пожаловать',
           style: Theme.of(context).textTheme.subtitle2!.copyWith(
                 fontSize: 18,
               ),
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(defaultPadding),
+        padding: const EdgeInsets.fromLTRB(
+            defaultPadding, 0, defaultPadding, defaultPadding),
         child: Center(
           child: Column(
             children: [
-              Image.asset(
-                'assets/images/login.png',
-                width: double.infinity,
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: defaultPadding * 2),
+                child: Image.asset(
+                  'assets/images/login.png',
+                  width: double.infinity,
+                ),
               ),
-              ElevatedButton(
-                child: const Text('Войти через Google'),
-                onPressed: _signInWithGoogle,
+              Text('Войдите в свой аккаунт',
+                  style: Theme.of(context).textTheme.headline6!.copyWith(
+                        fontSize: 24,
+                      )),
+              const SizedBox(height: defaultPadding),
+              SignInForm(
+                onSubmit: _signInWithEmailAndPassword,
               ),
               const SizedBox(height: defaultPadding / 2),
               Text(
@@ -98,25 +131,14 @@ class _SignInScreenState extends State<SignInScreen> {
                 style: Theme.of(context).textTheme.bodyText1,
               ),
               const SizedBox(height: defaultPadding / 2),
-              Form(
-                child: Column(
-                  children: [
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Имя пользователя',
-                      ),
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Пароль',
-                      ),
-                    ),
-                    const SizedBox(height: defaultPadding / 2),
-                    ElevatedButton(
-                      child: const Text('Войти'),
-                      onPressed: () {},
-                    ),
-                  ],
+              TextFieldContainer(
+                child: TextButton(
+                  child: Text(
+                    'Войти через Google',
+                    style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                        color: darkBlue.shade500, fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: _signInWithGoogle,
                 ),
               ),
             ],
