@@ -47,7 +47,7 @@ abstract class PrinterOutput {
     print(toJson());
 
     try {
-      var data = await printData();
+      await printData();
     } catch (e) {
       print(e);
     }
