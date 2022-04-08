@@ -8,6 +8,7 @@ import 'package:boomerang_pos/screens/auth/signin_screen.dart';
 import 'package:boomerang_pos/services/auth/firebase_auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 
@@ -19,14 +20,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  FirebaseAuthService firebaseAuthService = GetIt.I<FirebaseAuthService>();
+  final FirebaseAuthService _authService = GetIt.I<FirebaseAuthService>();
   User? _user;
   StreamSubscription? _userSubscription;
 
   @override
   void initState() {
     super.initState();
-    _userSubscription = firebaseAuthService.onAuthStateChanged.listen((user) {
+    _userSubscription = _authService.onAuthStateChanged.listen((user) {
       if (user == null) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
@@ -52,6 +53,14 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       drawer: Sidebar(user: _user),
       appBar: AppBar(
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          // Status bar color
+          statusBarColor: Colors.black,
+
+          // Status bar brightness (optional)
+          statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
+          statusBarBrightness: Brightness.light, // For iOS (dark icons)
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: Builder(builder: (context) {
