@@ -170,63 +170,63 @@ class _SignInScreenState extends State<SignInScreen> {
         padding: const EdgeInsets.fromLTRB(
             defaultPadding, 0, defaultPadding, defaultPadding),
         child: Center(
-          child: Column(
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: defaultPadding * 2),
-                // child: Image.asset(
-                //   'assets/images/login.png',
-                //   width: double.infinity,
-                // ),
-                child: SizedBox(
-                  width: 200,
-                  height: 200,
-                  child: CircleAvatar(
-                    child: ClipOval(
-                      child: _teddyArtboard == null
-                          ? Container()
-                          : Rive(
-                              artboard: _teddyArtboard!,
-                              fit: BoxFit.fitHeight,
-                            ),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: defaultPadding * 2,
+                  ),
+                  child: SizedBox(
+                    width: 200,
+                    height: 200,
+                    child: CircleAvatar(
+                      child: ClipOval(
+                        child: _teddyArtboard == null
+                            ? Container()
+                            : Rive(
+                                artboard: _teddyArtboard!,
+                                fit: BoxFit.fitHeight,
+                              ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: defaultPadding),
-              Text('Войдите в свой аккаунт',
-                  style: Theme.of(context).textTheme.headline6!.copyWith(
-                        fontSize: 24,
-                      )),
-              const SizedBox(height: defaultPadding),
-              SignInForm(
-                onSubmit: _signInWithEmailAndPassword,
-                onEmailInputEnd: () {
-                  _isTeddyLooking?.change(false);
-                },
-                onPasswordInputStart: _upTeddysHands,
-                onPasswordInputEnd: _downTeddysHands,
-                onEmailChange: _onEmailChange,
-                onFail: _sadTeddy,
-              ),
-              const SizedBox(height: defaultPadding / 2),
-              Text(
-                'Или',
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-              const SizedBox(height: defaultPadding / 2),
-              TextFieldContainer(
-                child: TextButton(
-                  child: Text(
-                    'Войти через Google',
-                    style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                        color: darkBlue.shade500, fontWeight: FontWeight.bold),
-                  ),
-                  onPressed: _signInWithGoogle,
+                const SizedBox(height: defaultPadding),
+                Text('Войдите в свой аккаунт',
+                    style: Theme.of(context).textTheme.headline6!.copyWith(
+                          fontSize: 24,
+                        )),
+                const SizedBox(height: defaultPadding),
+                SignInForm(
+                  onSubmit: _signInWithEmailAndPassword,
+                  onEmailInputEnd: () {
+                    _isTeddyLooking?.change(false);
+                  },
+                  onPasswordInputStart: _upTeddysHands,
+                  onPasswordInputEnd: _downTeddysHands,
+                  onEmailChange: _onEmailChange,
+                  onFail: _sadTeddy,
                 ),
-              ),
-            ],
+                const SizedBox(height: defaultPadding / 2),
+                Text(
+                  'Или',
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+                const SizedBox(height: defaultPadding / 2),
+                TextFieldContainer(
+                  child: TextButton(
+                    child: Text(
+                      'Войти через Google',
+                      style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                          color: darkBlue.shade500,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: _signInWithGoogle,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

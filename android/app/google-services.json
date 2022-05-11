@@ -1,28 +1,29 @@
 {
   "project_info": {
-    "project_number": "163312496929",
-    "project_id": "boomerang-c2222",
-    "storage_bucket": "boomerang-c2222.appspot.com"
+    "project_number": "585592659875",
+    "firebase_url": "https://boomerang-beta1-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "boomerang-beta1",
+    "storage_bucket": "boomerang-beta1.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:163312496929:android:5a685c7e4abb57c5bf4e60",
+        "mobilesdk_app_id": "1:585592659875:android:26ffbbfe0f1171ed404416",
         "android_client_info": {
           "package_name": "com.boomerang.kg"
         }
       },
       "oauth_client": [
         {
-          "client_id": "163312496929-6boic2t04e7std564bqi3tdf4f7ms2gn.apps.googleusercontent.com",
+          "client_id": "585592659875-ogeq7amuh3uo04o0rmeushj937v5ntjq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.boomerang.kg",
-            "certificate_hash": "d4e38e9c6e0942ce5867a0ea27a310d083ef119c"
+            "certificate_hash": "b8333e10b67a617dfc89a2c7ced9e0088b5bab4d"
           }
         },
         {
-          "client_id": "163312496929-h3r86q19r3uf611e5rdt440ous7rhqa8.apps.googleusercontent.com",
+          "client_id": "585592659875-qjrl7lbsm7ddaufm25vgifbqbusdffdt.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.boomerang.kg",
@@ -30,27 +31,52 @@
           }
         },
         {
-          "client_id": "163312496929-erakq70d5rhjdjuhndqmp16vflpun38b.apps.googleusercontent.com",
+          "client_id": "585592659875-qoa51d1cc0hs9c16gshgou9l5f6futm6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.boomerang.kg",
+            "certificate_hash": "5779d129937a90382c32f020acf8129c5a7e1311"
+          }
+        },
+        {
+          "client_id": "585592659875-rd9o0359c4eo1v77qv89t4rfgnvhn6q1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.boomerang.kg",
+            "certificate_hash": "45c06895a8eed2a174ed21cfb613c4896b81bdb7"
+          }
+        },
+        {
+          "client_id": "585592659875-v3nc9vf7h5o81uedhg4kfnlfjonucb88.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.boomerang.kg",
+            "certificate_hash": "0ead702888255d97246fbbf12b5c71d2e40a4e3b"
+          }
+        },
+        {
+          "client_id": "585592659875-53l098sn8uhq5lhr946a1i84tt3rm899.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAVgaWeUMS9Zh7MniqksSqGy7KVHn_-EE4"
+          "current_key": "AIzaSyBvbR_okMeUhyoMmRUJs2_sU6sbrE0FpIQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "163312496929-3767ndejnktf2qtosbga5vap472hrm8j.apps.googleusercontent.com",
+              "client_id": "585592659875-53l098sn8uhq5lhr946a1i84tt3rm899.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "163312496929-av1030hvmg9kqsc5n7du3cspk0ckaqq4.apps.googleusercontent.com",
+              "client_id": "585592659875-aesd2rfnuaaprvbb31ffdkcvlj98487b.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.boomerang.kg"
+                "bundle_id": "com.boomerang-delivery.boomerang-courier-v2",
+                "app_store_id": "1621840280"
               }
             }
           ]
@@ -59,78 +85,88 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:163312496929:android:64d7fff435168bc5bf4e60",
+        "mobilesdk_app_id": "1:585592659875:android:85afeef96997f626404416",
+        "android_client_info": {
+          "package_name": "com.boomerang_delivery.boomerang_courier_v2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "585592659875-52j6t0uv4t3q7ujhfmdve8cs6t45i7pf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.boomerang_delivery.boomerang_courier_v2",
+            "certificate_hash": "b428fc8f1484ef0085493452e15cb9f54e0cfedd"
+          }
+        },
+        {
+          "client_id": "585592659875-7gvs0n6mfgghr7ud6m8hli5nqhppg675.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.boomerang_delivery.boomerang_courier_v2",
+            "certificate_hash": "0ead702888255d97246fbbf12b5c71d2e40a4e3b"
+          }
+        },
+        {
+          "client_id": "585592659875-53l098sn8uhq5lhr946a1i84tt3rm899.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvbR_okMeUhyoMmRUJs2_sU6sbrE0FpIQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "585592659875-53l098sn8uhq5lhr946a1i84tt3rm899.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "585592659875-aesd2rfnuaaprvbb31ffdkcvlj98487b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.boomerang-delivery.boomerang-courier-v2",
+                "app_store_id": "1621840280"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:585592659875:android:6aeeb0fc592987d5404416",
         "android_client_info": {
           "package_name": "com.boomerang_delivery.pos_terminal"
         }
       },
       "oauth_client": [
         {
-          "client_id": "163312496929-erakq70d5rhjdjuhndqmp16vflpun38b.apps.googleusercontent.com",
+          "client_id": "585592659875-53l098sn8uhq5lhr946a1i84tt3rm899.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAVgaWeUMS9Zh7MniqksSqGy7KVHn_-EE4"
+          "current_key": "AIzaSyBvbR_okMeUhyoMmRUJs2_sU6sbrE0FpIQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "163312496929-3767ndejnktf2qtosbga5vap472hrm8j.apps.googleusercontent.com",
+              "client_id": "585592659875-53l098sn8uhq5lhr946a1i84tt3rm899.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "163312496929-av1030hvmg9kqsc5n7du3cspk0ckaqq4.apps.googleusercontent.com",
+              "client_id": "585592659875-aesd2rfnuaaprvbb31ffdkcvlj98487b.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.boomerang.kg"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:163312496929:android:45f88e3f15015368bf4e60",
-        "android_client_info": {
-          "package_name": "com.example.boomerang_courier"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "163312496929-7hubqdgm8dg1o7a66rbo4lsbnji1vtht.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.boomerang_courier",
-            "certificate_hash": "8cee16acac6d189345542249817bb8e1d10e099d"
-          }
-        },
-        {
-          "client_id": "163312496929-erakq70d5rhjdjuhndqmp16vflpun38b.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAVgaWeUMS9Zh7MniqksSqGy7KVHn_-EE4"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "163312496929-3767ndejnktf2qtosbga5vap472hrm8j.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "163312496929-av1030hvmg9kqsc5n7du3cspk0ckaqq4.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.boomerang.kg"
+                "bundle_id": "com.boomerang-delivery.boomerang-courier-v2",
+                "app_store_id": "1621840280"
               }
             }
           ]
