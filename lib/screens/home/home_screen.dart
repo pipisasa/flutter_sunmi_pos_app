@@ -1,15 +1,20 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:boomerang_pos/components/order_cards_list.dart';
 import 'package:boomerang_pos/components/section_title.dart';
 import 'package:boomerang_pos/components/sidebar.dart';
 import 'package:boomerang_pos/constants.dart';
+import 'package:boomerang_pos/printer_utils/printer_output.dart';
 import 'package:boomerang_pos/screens/auth/signin_screen.dart';
+import 'package:boomerang_pos/screens/home/home_page.dart';
 import 'package:boomerang_pos/services/auth/firebase_auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:sunmi_printer_plus/sunmi_printer_plus.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -19,14 +24,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  FirebaseAuthService firebaseAuthService = GetIt.I<FirebaseAuthService>();
+  final FirebaseAuthService _authService = GetIt.I<FirebaseAuthService>();
   User? _user;
   StreamSubscription? _userSubscription;
 
   @override
   void initState() {
     super.initState();
-    _userSubscription = firebaseAuthService.onAuthStateChanged.listen((user) {
+    _userSubscription = _authService.onAuthStateChanged.listen((user) {
       if (user == null) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
@@ -51,7 +56,20 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: Sidebar(user: _user),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _onPressed,
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ),
       appBar: AppBar(
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          // Status bar color
+          statusBarColor: Colors.black,
+
+          // Status bar brightness (optional)
+          statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
+          statusBarBrightness: Brightness.light, // For iOS (dark icons)
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: Builder(builder: (context) {
@@ -123,5 +141,56 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  void _onPressed() async {
+    await SunmiPrinter.bindingPrinter();
+    Map<String, dynamic> messageData = {
+      'title': 'Test Title',
+      'body': 'Test Body',
+      'type': 'pos-terminal',
+      'printerOuputData': jsonEncode([
+        TextPrinterOutput(text: 'Some Text').toJson(),
+        RowPrinterOutput(columns: [
+          ColumnMaker(text: 'Left Text', align: SunmiPrintAlign.LEFT),
+          ColumnMaker(text: 'Right Text', align: SunmiPrintAlign.RIGHT),
+        ]).toJson(),
+        QRCodePrinterOutput(text: 'http://google.com').toJson(),
+        BarCodePrinterOutput(
+          text: '123456789',
+        ).toJson(),
+        LinePrinterOutput().toJson(),
+        LineWrapPrinterOutput(lines: 2).toJson(),
+      ]),
+    };
+
+    final POSNotificationData data = POSNotificationData(
+      printerOuputDataJson:
+      (jsonDecode(messageData['printerOuputData']) as List)
+          .map((e) => e as Map<String, dynamic>)
+          .toList(),
+      notificationTitle: messageData['title'],
+      notificationBody: messageData['body'],
+    );
+    try {
+      await SunmiPrinter.initPrinter();
+      await SunmiPrinter.startTransactionPrint(true);
+      await SunmiPrinter.line();
+    } catch (e) {
+      print(e);
+    }
+
+    for (PrinterOutput printerOutput in data.printerOuputData) {
+      // await printerOutput.printData();
+      await printerOutput.printDataWithLogs();
+    }
+    try {
+      await SunmiPrinter.lineWrap(2);
+      await SunmiPrinter.line();
+      await SunmiPrinter.cut();
+      await SunmiPrinter.exitTransactionPrint(true);
+    } catch (e) {
+      print(e);
+    }
   }
 }

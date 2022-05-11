@@ -10,6 +10,8 @@ class RoundedInputField extends StatelessWidget {
   final bool obscureText;
   final TextEditingController? controller;
   final String? error;
+  final void Function()? onFocus;
+  final void Function()? onBlur;
 
   const RoundedInputField({
     Key? key,
@@ -20,6 +22,8 @@ class RoundedInputField extends StatelessWidget {
     this.obscureText = false,
     this.controller,
     this.error,
+    this.onFocus,
+    this.onBlur,
   }) : super(key: key);
 
   @override
@@ -28,19 +32,30 @@ class RoundedInputField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextFieldContainer(
-          child: TextFormField(
-            controller: controller,
-            onChanged: onChanged,
-            validator: validator,
-            cursorColor: darkBlue,
-            obscureText: obscureText,
-            decoration: InputDecoration(
-              icon: Icon(
-                icon,
-                color: darkBlue.shade500,
+          child: Focus(
+            onFocusChange: (focused) {
+              if (focused) {
+                onFocus?.call();
+              } else {
+                onBlur?.call();
+              }
+            },
+            child: TextFormField(
+              controller: controller,
+              onChanged: onChanged,
+              validator: validator,
+              cursorColor: darkBlue,
+              obscureText: obscureText,
+              onTap: onFocus,
+              onEditingComplete: onBlur,
+              decoration: InputDecoration(
+                icon: Icon(
+                  icon,
+                  color: darkBlue.shade500,
+                ),
+                hintText: hintText,
+                border: InputBorder.none,
               ),
-              hintText: hintText,
-              border: InputBorder.none,
             ),
           ),
         ),

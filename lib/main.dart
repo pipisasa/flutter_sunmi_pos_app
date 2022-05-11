@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:boomerang_pos/screens/home/home_screen.dart';
 import 'package:boomerang_pos/services/auth/firebase_auth_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
@@ -17,36 +20,39 @@ import 'package:boomerang_pos/printer_utils/printer_output.dart';
 import 'package:boomerang_pos/constants.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // If you're going to use other Firebase services in the background, such as Firestore,
-  // make sure you call `initializeApp` before using other Firebase services.
   await Firebase.initializeApp();
+  printCheck(message);
+}
 
-  // print("Handling a background message: ${message.messageId}");
+void printCheck(RemoteMessage message) async {
   await SunmiPrinter.bindingPrinter();
-  // final bool? isPrinterBind = await SunmiPrinter.bindingPrinter();
-  // final int paperSize = await SunmiPrinter.paperSize();
-  // final String printerVersion = await SunmiPrinter.printerVersion();
-  // final String printerSerialNumber = await SunmiPrinter.serialNumber();
 
-  if (message.data['type'] == 'pos-terminal' ||
-      message.from == 'pos-terminal') {
-    // List<PrinterOutput> printerOuputData = (jsonDecode(message.data['printerOuputData']) as List)
+  if (message.data['type'] == 'pos-terminal'||message.from == 'pos-terminal') {
+    // List<PrinterOutput> printerOutputDataJson = (jsonDecode(message.data['printerOutputData']) as List)
     //         .map<PrinterOutput>((data) => PrinterOutput.fromJson(data as Map<String, dynamic>))
     //         .toList();
-    List printerOuputDataJson = jsonDecode(message.data['printerOuputData']);
+
+    final outputId = message.data['outputId'];
+    
+    final jsonData = (await FirebaseFirestore.instance.collection('printer_output').doc(outputId).get()).data();
+
+    log('JSON DATA $jsonData');
+    if(jsonData == null || jsonData['data'] == null) return;
+
+    List<PrinterOutput> printerOutputDataJson = (jsonData['data'] as List)
+        .map<PrinterOutput>((data) => PrinterOutput.fromJson(data as Map<String, dynamic>))
+        .toList();
+    
     try {
       await SunmiPrinter.initPrinter();
       await SunmiPrinter.startTransactionPrint(true);
       await SunmiPrinter.line();
     } catch (e) {
-      print(e);
+      log('$e');
     }
 
-    for (PrinterOutput printerOutputJson in printerOuputDataJson) {
-      // await printerOutput.printData();
-      PrinterOutput printerOutput =
-          PrinterOutput.fromJson(printerOutputJson as Map<String, dynamic>);
-      await printerOutput.printDataWithLogs();
+    for (PrinterOutput printerOutputJson in printerOutputDataJson) {
+      await printerOutputJson.printDataWithLogs();
     }
     try {
       await SunmiPrinter.lineWrap(2);
@@ -64,17 +70,29 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   // await SunmiPrinter.bindingPrinter();
   await FirebaseMessaging.instance.subscribeToTopic('pos-terminal');
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onMessage.listen((RemoteMessage event) async {
+    printCheck(event);
+  });
 
+  //? Initialize GetIt
   GetIt.I.registerSingleton<FirebaseAuthService>(FirebaseAuthService());
 
+  //? Set app orientation
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
 
+  FirebaseAuth.instance.authStateChanges().listen((user) async {
+    if (user != null) {
+      final token = await FirebaseMessaging.instance.getToken();
+      print("Token is: $token");
+    }
+  });
   runApp(const MyApp());
 }
 
@@ -88,20 +106,13 @@ class MyApp extends StatelessWidget {
       title: 'Boomerang POS Terminal',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          // This is the theme of your application.
-          //
-          // Try running your application with "flutter run". You'll see the
-          // application has a blue toolbar. Then, without quitting the app, try
-          // changing the primarySwatch below to Colors.green and then invoke
-          // "hot reload" (press "r" in the console where you ran "flutter run",
-          // or simply save your changes to "hot reload" in a Flutter IDE).
-          // Notice that the counter didn't reset back to zero; the application
-          // is not restarted.
-          scaffoldBackgroundColor: bgColor,
-          fontFamily: "Roboto",
-          primarySwatch: limeGreen,
-          textTheme:
-              const TextTheme(bodyText2: TextStyle(color: Colors.black54))),
+        scaffoldBackgroundColor: bgColor,
+        fontFamily: "Roboto",
+        primarySwatch: limeGreen,
+        textTheme: const TextTheme(
+          bodyText2: TextStyle(color: Colors.black54),
+        ),
+      ),
       home: const HomeScreen(),
     );
   }

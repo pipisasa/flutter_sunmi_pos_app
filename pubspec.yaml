@@ -40,8 +40,10 @@ dependencies:
     sdk: flutter
   flutter_svg: ^1.0.3
   flutterfire_ui: ^0.3.2
+  get: ^4.6.1
   get_it: ^7.2.0
   google_sign_in: ^5.2.3
+  rive: ^0.8.1
   sunmi_printer_plus: ^2.0.11
 
 dev_dependencies:
@@ -62,6 +64,7 @@ flutter:
   assets:
     - assets/icons/
     - assets/images/
+    - assets/animations/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see

@@ -1,5 +1,6 @@
 abstract class AuthService<UserType> {
   Future<UserType?> signInWithEmailAndPassword(String email, String password);
+  Future<UserType?> signInWithGoogle();
   Future<UserType?> createUserWithEmailAndPassword(
       String email, String password);
   Future<String?> getCurrentUserId();
