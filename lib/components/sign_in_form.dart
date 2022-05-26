@@ -5,9 +5,22 @@ import 'package:flutter/material.dart';
 
 class SignInForm extends StatefulWidget {
   final void Function(String username, String password) onSubmit;
+  final void Function(String email)? onEmailChange;
+  final void Function()? onEmailInputStart;
+  final void Function()? onEmailInputEnd;
+  final void Function()? onPasswordInputStart;
+  final void Function()? onPasswordInputEnd;
+  final void Function()? onFail;
+
   const SignInForm({
     Key? key,
     required this.onSubmit,
+    this.onEmailChange,
+    this.onEmailInputStart,
+    this.onEmailInputEnd,
+    this.onPasswordInputStart,
+    this.onPasswordInputEnd,
+    this.onFail,
   }) : super(key: key);
 
   @override
@@ -41,11 +54,16 @@ class _SignInFormState extends State<SignInForm> {
 
   void _handleSubmit() {
     var currentState = _formKey.currentState;
-    if (currentState != null && currentState.validate() && validate()) {
+    FocusScope.of(context).unfocus();
+    if (currentState == null) return;
+
+    if (currentState.validate() && validate()) {
       widget.onSubmit(
         _emailController.text.trim(),
         _passwordController.text.trim(),
       );
+    } else {
+      widget.onFail?.call();
     }
   }
 
@@ -60,6 +78,9 @@ class _SignInFormState extends State<SignInForm> {
             hintText: 'Имя пользователя',
             icon: Icons.person,
             error: emailError,
+            onChanged: widget.onEmailChange,
+            onFocus: widget.onEmailInputStart,
+            onBlur: widget.onEmailInputEnd,
           ),
           RoundedInputField(
             controller: _passwordController,
@@ -67,6 +88,8 @@ class _SignInFormState extends State<SignInForm> {
             icon: Icons.lock,
             obscureText: true,
             error: passwordError,
+            onFocus: widget.onPasswordInputStart,
+            onBlur: widget.onPasswordInputEnd,
           ),
           const SizedBox(height: defaultPadding / 2),
           TextFieldContainer(

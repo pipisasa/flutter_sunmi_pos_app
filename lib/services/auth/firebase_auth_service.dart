@@ -5,7 +5,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 class FirebaseAuthService extends AuthService<User> {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  Future<User?> signInWithGoogle() async {
+  @override
+  signInWithGoogle() async {
     // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
@@ -42,6 +43,7 @@ class FirebaseAuthService extends AuthService<User> {
         print(e.code);
       }
     }
+    return null;
   }
 
   @override
@@ -73,6 +75,13 @@ class FirebaseAuthService extends AuthService<User> {
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  Stream<User?> get user {
+    return _firebaseAuth.authStateChanges().map((firebaseUser) {
+      return firebaseUser;
+
+    });
   }
 
   @override

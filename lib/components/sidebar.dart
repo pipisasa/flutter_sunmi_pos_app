@@ -3,13 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Sidebar extends StatelessWidget {
+  final User? user;
+
   const Sidebar({
     Key? key,
-    required User? user,
-  })  : _user = user,
-        super(key: key);
-
-  final User? _user;
+    required this.user,
+  })  :super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,29 +19,26 @@ class Sidebar extends StatelessWidget {
         children: [
           UserAccountsDrawerHeader(
             accountName: Text(
-              _user?.displayName ?? "",
+              user?.displayName ?? "",
               style: const TextStyle(color: Colors.white),
             ),
             accountEmail: Text(
-              _user?.email ?? "",
+              user?.email ?? "",
               style: const TextStyle(color: Colors.white),
             ),
             currentAccountPicture: CircleAvatar(
               backgroundColor: limeGreen,
-              child: _user?.photoURL != null
+              child: user?.photoURL != null
                   ? ClipOval(
                       child: Image.network(
-                        _user?.photoURL ?? "",
+                        user?.photoURL ?? "",
                         width: 90,
                         height: 90,
                         fit: BoxFit.cover,
                       ),
                     )
                   : Text(
-                      (_user?.displayName ?? _user?.email)
-                              ?.substring(0, 1)
-                              .toUpperCase() ??
-                          "",
+                      '${user?.displayName} - ${user?.email}',
                       style: Theme.of(context).textTheme.headline4!.copyWith(
                             color: Colors.white,
                           ),

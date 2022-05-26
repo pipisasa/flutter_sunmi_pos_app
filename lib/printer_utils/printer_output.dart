@@ -128,7 +128,7 @@ class RowPrinterOutput extends PrinterOutput {
 
   factory RowPrinterOutput.fromJson(Map<String, dynamic> json) {
     return RowPrinterOutput(
-        columns: (json['columns'] as List<Map<String, dynamic>>)
+        columns: (json['columns'] as List<dynamic>)
             .map<ColumnMaker>((col) => ColumnMaker(
                   text: col['text'],
                   width: col['width'] ?? 2,
