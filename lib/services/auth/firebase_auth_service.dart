@@ -77,6 +77,13 @@ class FirebaseAuthService extends AuthService<User> {
     }
   }
 
+  Stream<User?> get user {
+    return _firebaseAuth.authStateChanges().map((firebaseUser) {
+      return firebaseUser;
+
+    });
+  }
+
   @override
   get currentUser => _firebaseAuth.currentUser;
 

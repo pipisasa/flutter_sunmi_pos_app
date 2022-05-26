@@ -45,12 +45,20 @@ dependencies:
   google_sign_in: ^5.2.3
   rive: ^0.8.1
   sunmi_printer_plus: ^2.0.11
+  equatable: ^2.0.3
+  cloud_firestore_odm: ^1.0.0-dev.15
+  json_annotation: ^4.5.0
+  json_serializable: ^6.2.0
+  overlay_support: 1.2.1
+  flutter_local_notifications: ^9.5.3+1
 
 dev_dependencies:
   change_app_package_name: ^1.0.0
   flutter_lints: ^1.0.0
+  build_runner: ^2.1.10
   flutter_test:
     sdk: flutter
+  cloud_firestore_odm_generator: ^1.0.0-dev.15
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

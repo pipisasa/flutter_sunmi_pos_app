@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:boomerang_pos/components/order_cards_list.dart';
 import 'package:boomerang_pos/components/section_title.dart';
@@ -7,7 +8,6 @@ import 'package:boomerang_pos/components/sidebar.dart';
 import 'package:boomerang_pos/constants.dart';
 import 'package:boomerang_pos/printer_utils/printer_output.dart';
 import 'package:boomerang_pos/screens/auth/signin_screen.dart';
-import 'package:boomerang_pos/screens/home/home_page.dart';
 import 'package:boomerang_pos/services/auth/firebase_auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +15,20 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sunmi_printer_plus/sunmi_printer_plus.dart';
+
+class POSNotificationData {
+  final List<PrinterOutput> printerOutputData;
+  final String? notificationTitle;
+  final String? notificationBody;
+
+  POSNotificationData({
+    required List<Map<String, dynamic>> printerOutputDataJson,
+    this.notificationTitle,
+    this.notificationBody,
+  }) : printerOutputData = printerOutputDataJson
+            .map((Map<String, dynamic> data) => PrinterOutput.fromJson(data))
+            .toList();
+}
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -101,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(defaultPadding),
+        padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -119,24 +133,6 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: defaultPadding),
             const SectionTitle(),
             const OrderCardsList(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Меню',
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-                GestureDetector(
-                  onTap: () {},
-                  child: const Text(
-                    'Показать все',
-                    style: TextStyle(
-                      color: Colors.blue,
-                    ),
-                  ),
-                ),
-              ],
-            )
           ],
         ),
       ),
@@ -165,10 +161,10 @@ class _HomeScreenState extends State<HomeScreen> {
     };
 
     final POSNotificationData data = POSNotificationData(
-      printerOuputDataJson:
-      (jsonDecode(messageData['printerOuputData']) as List)
-          .map((e) => e as Map<String, dynamic>)
-          .toList(),
+      printerOutputDataJson:
+          (jsonDecode(messageData['printerOuputData']) as List)
+              .map((e) => e as Map<String, dynamic>)
+              .toList(),
       notificationTitle: messageData['title'],
       notificationBody: messageData['body'],
     );
@@ -177,10 +173,10 @@ class _HomeScreenState extends State<HomeScreen> {
       await SunmiPrinter.startTransactionPrint(true);
       await SunmiPrinter.line();
     } catch (e) {
-      print(e);
+      log('$e');
     }
 
-    for (PrinterOutput printerOutput in data.printerOuputData) {
+    for (PrinterOutput printerOutput in data.printerOutputData) {
       // await printerOutput.printData();
       await printerOutput.printDataWithLogs();
     }
@@ -190,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
       await SunmiPrinter.cut();
       await SunmiPrinter.exitTransactionPrint(true);
     } catch (e) {
-      print(e);
+      log('$e');
     }
   }
 }
