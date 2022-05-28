@@ -3,11 +3,9 @@ import 'package:boomerang_pos/screens/home/home_screen.dart';
 import 'package:boomerang_pos/services/auth/firebase_auth_service.dart';
 import 'package:boomerang_pos/services/messaging/messaging_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get_it/get_it.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 // Firebase
@@ -46,22 +44,15 @@ void main() async {
   );
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  // Initialize GetIt
-  GetIt.I.registerSingleton<FirebaseAuthService>(FirebaseAuthService());
+  Get.put<FirebaseAuthService>(FirebaseAuthService());
   Get.put<FirebaseFirestore>(FirebaseFirestore.instance);
+  Get.put<FirebaseMessaging>(FirebaseMessaging.instance);
 
   //? Set app orientation
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-
-  FirebaseAuth.instance.authStateChanges().listen((user) async {
-    if (user != null) {
-      final token = await FirebaseMessaging.instance.getToken();
-      log("Token is: $token");
-    }
-  });
   await _msgService.init();
 
   runApp(const MyApp());
