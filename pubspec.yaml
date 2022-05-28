@@ -29,7 +29,9 @@ environment:
 dependencies:
   cached_network_image: ^3.2.0
   cloud_firestore: ^3.1.6
+  cloud_firestore_odm: ^1.0.0-dev.15
   cupertino_icons: ^1.0.2
+  equatable: ^2.0.3
   esc_pos_utils: ^1.1.0
   firebase_analytics: ^9.0.5
   firebase_auth: ^3.3.5
@@ -38,27 +40,26 @@ dependencies:
   firebase_messaging: ^11.2.6
   flutter:
     sdk: flutter
+  flutter_local_notifications: ^9.5.3+1
   flutter_svg: ^1.0.3
+  flutter_widget_from_html: ^0.8.5
   flutterfire_ui: ^0.3.2
   get: ^4.6.1
   get_it: ^7.2.0
   google_sign_in: ^5.2.3
-  rive: ^0.8.1
-  sunmi_printer_plus: ^2.0.11
-  equatable: ^2.0.3
-  cloud_firestore_odm: ^1.0.0-dev.15
   json_annotation: ^4.5.0
   json_serializable: ^6.2.0
   overlay_support: 1.2.1
-  flutter_local_notifications: ^9.5.3+1
+  rive: ^0.8.1
+  sunmi_printer_plus: ^2.1.0
 
 dev_dependencies:
-  change_app_package_name: ^1.0.0
-  flutter_lints: ^1.0.0
   build_runner: ^2.1.10
+  change_app_package_name: ^1.0.0
+  cloud_firestore_odm_generator: ^1.0.0-dev.15
+  flutter_lints: ^1.0.0
   flutter_test:
     sdk: flutter
-  cloud_firestore_odm_generator: ^1.0.0-dev.15
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
