@@ -41,7 +41,10 @@ class MessagingService {
       if (token != null) _setToken(token);
       if ((user?.email?.isNotEmpty ?? false) &&
           user!.email!.endsWith('@restaurant-boomerang.kg')) {
-        _firebaseMessaging.subscribeToTopic(user.email!);
+        _firebaseMessaging.subscribeToTopic(user.email!
+            .replaceAll(RegExp(r'[@]restaurant-boomerang[.]kg'), ''));
+      } else {
+        _firebaseMessaging.deleteToken();
       }
     });
     return this;

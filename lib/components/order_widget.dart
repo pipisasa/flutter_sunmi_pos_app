@@ -79,14 +79,14 @@ class OrderWidget extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Филиал: ${order.restaurant?.address}',
+                  'Филиал: ${order.restaurant?.address?.replaceAll(r'Киргизия', 'Кыргызстан')}',
                   style: const TextStyle(
                     color: Colors.black,
                     fontSize: 12,
                   ),
                 ),
                 Text(
-                  '${order.created_at?.toDate().year}-${order.created_at?.toDate().month}-${order.created_at?.toDate().day}  ${order.created_at?.toDate().hour}:${order.created_at?.toDate().minute}',
+                  '${order.created_at?.toDate().toLocal().year}-${order.created_at?.toDate().toLocal().month}-${order.created_at?.toDate().toLocal().day}  ${order.created_at?.toDate().toLocal().hour}:${order.created_at?.toDate().toLocal().minute}',
                   style: const TextStyle(
                     color: Colors.black,
                     fontSize: 16,
@@ -109,7 +109,7 @@ class OrderWidget extends StatelessWidget {
                 ),
 
                 Text(
-                  'Aдрес: \n${order.user?.address?.name}',
+                  'Aдрес: \n${order.user?.address?.name?.replaceAll(r'Киргизия', 'Кыргызстан')}',
                   style: const TextStyle(
                     color: Colors.black,
                     fontSize: 12,

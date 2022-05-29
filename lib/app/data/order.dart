@@ -144,6 +144,9 @@ Order? orderfromJson(Map<String, Object?>? json) =>
 Map<String, Object?>? orderToJson(Order? order) =>
     order != null ? _$OrderToJson(order) : null;
 
+Order orderfromJsonRequired(Map<String, Object?> json) => _$OrderFromJson(json);
+Map<String, Object?> orderToJsonRequired(Order order) => _$OrderToJson(order);
+
 @JsonSerializable()
 class Restaurant {
   final int? pk;
