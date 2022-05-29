@@ -2,12 +2,11 @@ import 'dart:convert';
 
 import 'package:boomerang_pos/app/data/order.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:get/instance_manager.dart';
 
 //? Firestore Reference
 dynamic firestoreDocRefToJson(dynamic value) => value;
 DocumentReference? firestoreDocRefFromJson(dynamic value) {
-  FirebaseFirestore _firestore = Get.find<FirebaseFirestore>();
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
   if (value is String) {
     return _firestore.collection('users').doc(value);
   }
@@ -32,7 +31,7 @@ Map<String, Map<String, dynamic>>? firestoreOrdersMapToJson(dynamic value) =>
 
 Map<String, OrderItem>? firestoreOrdersMapFromJSON(dynamic value) =>
     (value as Map<String, dynamic>?)?.map(
-          (k, e) => MapEntry(k, OrderItem.fromJson(e as Map<String, dynamic>)),
+      (k, e) => MapEntry(k, OrderItem.fromJson(e as Map<String, dynamic>)),
     );
 
 //? Firestore Timestamp

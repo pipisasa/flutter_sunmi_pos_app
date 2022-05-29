@@ -13,29 +13,7 @@ import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-// Printer
-import 'package:sunmi_printer_plus/sunmi_printer_plus.dart';
-
 import 'package:boomerang_pos/constants.dart';
-
-void printCheck(RemoteMessage message) async {
-  await SunmiPrinter.bindingPrinter();
-
-  if (message.data['type'] == 'pos-terminal' ||
-      message.from == 'pos-terminal') {
-    final outputId = message.data['outputId'];
-
-    final jsonData = (await FirebaseFirestore.instance
-            .collection('printer_output')
-            .doc(outputId)
-            .get())
-        .data();
-
-    if (jsonData == null || jsonData['data'] == null) return;
-  }
-}
-
-MessagingService _msgService = MessagingService();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,28 +25,37 @@ void main() async {
   Get.put<FirebaseAuthService>(FirebaseAuthService());
   Get.put<FirebaseFirestore>(FirebaseFirestore.instance);
   Get.put<FirebaseMessaging>(FirebaseMessaging.instance);
+  Get.putAsync<MessagingService>(() => MessagingService().init());
 
   //? Set app orientation
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  await _msgService.init();
 
   runApp(const MyApp());
 }
 
 /// Top level function to handle incoming messages when the app is in the background
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  log(" --- background message received ---");
+  log(" --- BACKGROUND MESSAGE RECEIVED ---");
   log('${message.notification!.title}');
   log('${message.notification!.body}');
-  showSimpleNotification(
-    Text('${message.notification!.title}'),
-    subtitle: Text('${message.notification!.body}'),
-    background: Colors.white,
-    duration: const Duration(seconds: 2),
-  );
+  // showSimpleNotification(
+  //   Text('${message.notification!.title}'),
+  //   subtitle: Text('${message.notification!.body}'),
+  //   background: Colors.white,
+  //   duration: const Duration(seconds: 2),
+  // );
+  try {
+    Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (e) {
+    log('Firebase app already exist: $e');
+  }
+  await Future.delayed(Duration(seconds: 2));
+  onRemoteMessage(message);
 }
 
 class MyApp extends StatelessWidget {

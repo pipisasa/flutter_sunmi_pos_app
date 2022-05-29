@@ -67,6 +67,9 @@ class Order {
   @JsonKey(fromJson: OrderClientFromJson, toJson: OrderClientToJson)
   final OrderClient? user;
   final int? order;
+  final double totalContainersPrice;
+  final int containersCount;
+  final double containerPrice;
 
   Order({
     this.id,
@@ -92,6 +95,9 @@ class Order {
     this.updated_at,
     this.user,
     this.order,
+    this.totalContainersPrice = 0,
+    this.containersCount = 0,
+    this.containerPrice = 0,
   });
 
   factory Order.fromJson(Map<String, Object?> json) => _$OrderFromJson(json);
@@ -121,7 +127,7 @@ class Order {
 
   static String getLocaleStatus(String? status,
       {List<String> excludeStatuses = const [],
-        String defaultStatus = 'Неизвестно'}) {
+      String defaultStatus = 'Неизвестно'}) {
     if (excludeStatuses.contains(status)) {
       return defaultStatus;
     }
@@ -191,7 +197,7 @@ Map<String, Object?>? OrderItemToJson(OrderItem? value) =>
 @JsonSerializable()
 class OrderClient {
   final String uid;
-  @JsonKey(fromJson: AddressFromJson, toJson: AddressToJson)
+  @JsonKey(fromJson: firestoreAddressFromJson, toJson: firestoreAddressToJson)
   final Address? address;
   final String? email;
   final String? name;

@@ -32,7 +32,9 @@ class FirebaseAuthService extends AuthService<User> {
   signInWithEmailAndPassword(String email, String password) async {
     try {
       UserCredential result = await _firebaseAuth.signInWithEmailAndPassword(
-          email: email, password: password);
+        email: email,
+        password: password,
+      );
       return result.user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -80,7 +82,6 @@ class FirebaseAuthService extends AuthService<User> {
   Stream<User?> get user {
     return _firebaseAuth.authStateChanges().map((firebaseUser) {
       return firebaseUser;
-
     });
   }
 

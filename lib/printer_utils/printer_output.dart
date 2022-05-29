@@ -1,7 +1,10 @@
 import 'dart:typed_data';
 import 'package:http/http.dart' show get;
+import 'package:sunmi_printer_plus/column_maker.dart';
+import 'package:sunmi_printer_plus/enums.dart';
 
 import 'package:sunmi_printer_plus/sunmi_printer_plus.dart';
+import 'package:sunmi_printer_plus/sunmi_style.dart';
 
 enum PrinterOutputType { text, row, qrCode, barcode, line, lineWrap, image }
 

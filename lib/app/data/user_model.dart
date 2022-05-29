@@ -21,6 +21,7 @@ class UserModel {
   final bool? isCourier;
   final bool? isRestaurant;
   final bool? isActiveCourier;
+  final List<String>? deviceIds;
   @JsonKey(fromJson: firestoreDocRefFromJson, toJson: firestoreDocRefToJson)
   final DocumentReference? selectedAddress;
 
@@ -38,6 +39,7 @@ class UserModel {
     this.isRestaurant,
     this.isActiveCourier,
     this.selectedAddress,
+    this.deviceIds,
   });
   factory UserModel.fromJson(Map<String, Object?> json) =>
       _$UserModelFromJson(json);
@@ -74,13 +76,40 @@ class Address {
   Map<String, Object?> toJson() => _$AddressToJson(this);
 }
 
+Address? firestoreAddressFromJson(Map<String, Object?>? json) =>
+    json != null ? _$AddressFromJson(json) : null;
+Map<String, Object?>? firestoreAddressToJson(Address? address) =>
+    address != null ? _$AddressToJson(address) : null;
+
+@JsonSerializable()
+class UserDeviceTokens {
+  final String token;
+  @JsonKey(
+      fromJson: firestoreTimestampFromJson, toJson: firestoreTimestampToJson)
+  final Timestamp? createdAt;
+  final String platform;
+
+  const UserDeviceTokens({
+    required this.token,
+    required this.createdAt,
+    required this.platform,
+  });
+
+  factory UserDeviceTokens.fromJson(Map<String, Object?> json) =>
+      _$UserDeviceTokensFromJson(json);
+  Map<String, Object?> toJson() => _$UserDeviceTokensToJson(this);
+}
+
+UserDeviceTokens? firestoreUserDeviceTokensFromJson(
+        Map<String, Object?>? json) =>
+    json != null ? _$UserDeviceTokensFromJson(json) : null;
+Map<String, Object?>? firestoreUserDeviceTokensToJson(
+        UserDeviceTokens? value) =>
+    value != null ? _$UserDeviceTokensToJson(value) : null;
+
 @Collection<UserModel>('users')
 @Collection<Address>('users/*/addresses')
+@Collection<UserDeviceTokens>('users/*/deviceTokens')
 final usersRef = UserModelCollectionReference();
-
-Address? AddressFromJson(Map<String, Object?>? json) =>
-    json != null ? _$AddressFromJson(json) : null;
-Map<String, Object?>? AddressToJson(Address? address) =>
-    address != null ? _$AddressToJson(address) : null;
 
 // final AddressCollectionReference addressesRef = usersRef.doc('myDocumentID').addresses;

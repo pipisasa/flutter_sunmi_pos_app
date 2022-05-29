@@ -8,7 +8,7 @@ import 'package:boomerang_pos/services/auth/firebase_auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get_it/get_it.dart';
+import 'package:get/instance_manager.dart';
 import 'package:rive/rive.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -19,7 +19,7 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  final FirebaseAuthService _authService = GetIt.I<FirebaseAuthService>();
+  final FirebaseAuthService _authService = Get.find<FirebaseAuthService>();
   late StreamSubscription _userSubscription;
 
   SMIInput<bool>? _isTeddyHandsUp;

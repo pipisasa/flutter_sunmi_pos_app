@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
+// import 'package:boomerang_pos/app/data/order.dart';
 import 'package:boomerang_pos/components/order_cards_list.dart';
 import 'package:boomerang_pos/components/section_title.dart';
 import 'package:boomerang_pos/components/sidebar.dart';
@@ -13,7 +14,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get_it/get_it.dart';
+import 'package:get/instance_manager.dart';
+import 'package:sunmi_printer_plus/column_maker.dart';
+import 'package:sunmi_printer_plus/enums.dart';
 import 'package:sunmi_printer_plus/sunmi_printer_plus.dart';
 
 class POSNotificationData {
@@ -38,9 +41,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final FirebaseAuthService _authService = GetIt.I<FirebaseAuthService>();
+  final FirebaseAuthService _authService = Get.find<FirebaseAuthService>();
   User? _user;
   StreamSubscription? _userSubscription;
+  // Order? order;
 
   @override
   void initState() {
@@ -53,9 +57,18 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         );
       } else {
+        log("User: $user");
         setState(() {
           _user = user;
         });
+        // ordersRef.doc('22HGEN').get().then((orderSnap) {
+        //   final data = orderSnap.data;
+        //   if (data != null) {
+        //     setState(() {
+        //       order = data;
+        //     });
+        //   }
+        // });
       }
     });
   }
@@ -114,27 +127,32 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Главная',
-              style: Theme.of(context).textTheme.headline4!.copyWith(
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black,
-                  ),
-            ),
-            const Text(
-              'Выберите операцию',
-              style: TextStyle(fontSize: 18),
-            ),
-            const SizedBox(height: defaultPadding),
-            const SectionTitle(),
-            const OrderCardsList(),
-          ],
-        ),
+      // body: order != null ? OrderWidget(order: order!) : _buildBody(context),
+      body: _buildBody(context),
+    );
+  }
+
+  Padding _buildBody(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Главная',
+            style: Theme.of(context).textTheme.headline4!.copyWith(
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                ),
+          ),
+          const Text(
+            'Выберите операцию',
+            style: TextStyle(fontSize: 18),
+          ),
+          const SizedBox(height: defaultPadding),
+          const SectionTitle(),
+          const OrderCardsList(),
+        ],
       ),
     );
   }

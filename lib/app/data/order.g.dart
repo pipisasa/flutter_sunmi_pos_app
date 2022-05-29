@@ -134,6 +134,9 @@ abstract class OrderDocumentReference
     bool? take_it_myself,
     num? total_price,
     int? order,
+    double totalContainersPrice,
+    int containersCount,
+    double containerPrice,
   });
 
   Future<void> set(Order value);
@@ -194,6 +197,9 @@ class _$OrderDocumentReference
     Object? take_it_myself = _sentinel,
     Object? total_price = _sentinel,
     Object? order = _sentinel,
+    Object? totalContainersPrice = _sentinel,
+    Object? containersCount = _sentinel,
+    Object? containerPrice = _sentinel,
   }) async {
     final json = {
       if (id != _sentinel) "id": id as int?,
@@ -215,6 +221,12 @@ class _$OrderDocumentReference
         "take_it_myself": take_it_myself as bool?,
       if (total_price != _sentinel) "total_price": total_price as num?,
       if (order != _sentinel) "order": order as int?,
+      if (totalContainersPrice != _sentinel)
+        "totalContainersPrice": totalContainersPrice as double,
+      if (containersCount != _sentinel)
+        "containersCount": containersCount as int,
+      if (containerPrice != _sentinel)
+        "containerPrice": containerPrice as double,
     };
 
     return reference.update(json);
@@ -438,6 +450,39 @@ abstract class OrderQuery implements QueryReference<OrderQuerySnapshot> {
     List<int?>? whereIn,
     List<int?>? whereNotIn,
   });
+  OrderQuery whereTotalContainersPrice({
+    double? isEqualTo,
+    double? isNotEqualTo,
+    double? isLessThan,
+    double? isLessThanOrEqualTo,
+    double? isGreaterThan,
+    double? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<double>? whereIn,
+    List<double>? whereNotIn,
+  });
+  OrderQuery whereContainersCount({
+    int? isEqualTo,
+    int? isNotEqualTo,
+    int? isLessThan,
+    int? isLessThanOrEqualTo,
+    int? isGreaterThan,
+    int? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<int>? whereIn,
+    List<int>? whereNotIn,
+  });
+  OrderQuery whereContainerPrice({
+    double? isEqualTo,
+    double? isNotEqualTo,
+    double? isLessThan,
+    double? isLessThanOrEqualTo,
+    double? isGreaterThan,
+    double? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<double>? whereIn,
+    List<double>? whereNotIn,
+  });
 
   OrderQuery orderById({
     bool descending = false,
@@ -625,6 +670,42 @@ abstract class OrderQuery implements QueryReference<OrderQuerySnapshot> {
     int? startAfter,
     int? endAt,
     int? endBefore,
+    OrderDocumentSnapshot? startAtDocument,
+    OrderDocumentSnapshot? endAtDocument,
+    OrderDocumentSnapshot? endBeforeDocument,
+    OrderDocumentSnapshot? startAfterDocument,
+  });
+
+  OrderQuery orderByTotalContainersPrice({
+    bool descending = false,
+    double startAt,
+    double startAfter,
+    double endAt,
+    double endBefore,
+    OrderDocumentSnapshot? startAtDocument,
+    OrderDocumentSnapshot? endAtDocument,
+    OrderDocumentSnapshot? endBeforeDocument,
+    OrderDocumentSnapshot? startAfterDocument,
+  });
+
+  OrderQuery orderByContainersCount({
+    bool descending = false,
+    int startAt,
+    int startAfter,
+    int endAt,
+    int endBefore,
+    OrderDocumentSnapshot? startAtDocument,
+    OrderDocumentSnapshot? endAtDocument,
+    OrderDocumentSnapshot? endBeforeDocument,
+    OrderDocumentSnapshot? startAfterDocument,
+  });
+
+  OrderQuery orderByContainerPrice({
+    bool descending = false,
+    double startAt,
+    double startAfter,
+    double endAt,
+    double endBefore,
     OrderDocumentSnapshot? startAtDocument,
     OrderDocumentSnapshot? endAtDocument,
     OrderDocumentSnapshot? endBeforeDocument,
@@ -1125,6 +1206,90 @@ class _$OrderQuery extends QueryReference<OrderQuerySnapshot>
     return _$OrderQuery(
       reference.where(
         'order',
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      _collection,
+    );
+  }
+
+  OrderQuery whereTotalContainersPrice({
+    double? isEqualTo,
+    double? isNotEqualTo,
+    double? isLessThan,
+    double? isLessThanOrEqualTo,
+    double? isGreaterThan,
+    double? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<double>? whereIn,
+    List<double>? whereNotIn,
+  }) {
+    return _$OrderQuery(
+      reference.where(
+        'totalContainersPrice',
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      _collection,
+    );
+  }
+
+  OrderQuery whereContainersCount({
+    int? isEqualTo,
+    int? isNotEqualTo,
+    int? isLessThan,
+    int? isLessThanOrEqualTo,
+    int? isGreaterThan,
+    int? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<int>? whereIn,
+    List<int>? whereNotIn,
+  }) {
+    return _$OrderQuery(
+      reference.where(
+        'containersCount',
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      _collection,
+    );
+  }
+
+  OrderQuery whereContainerPrice({
+    double? isEqualTo,
+    double? isNotEqualTo,
+    double? isLessThan,
+    double? isLessThanOrEqualTo,
+    double? isGreaterThan,
+    double? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<double>? whereIn,
+    List<double>? whereNotIn,
+  }) {
+    return _$OrderQuery(
+      reference.where(
+        'containerPrice',
         isEqualTo: isEqualTo,
         isNotEqualTo: isNotEqualTo,
         isLessThan: isLessThan,
@@ -1811,6 +1976,133 @@ class _$OrderQuery extends QueryReference<OrderQuerySnapshot>
     return _$OrderQuery(query, _collection);
   }
 
+  OrderQuery orderByTotalContainersPrice({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    OrderDocumentSnapshot? startAtDocument,
+    OrderDocumentSnapshot? endAtDocument,
+    OrderDocumentSnapshot? endBeforeDocument,
+    OrderDocumentSnapshot? startAfterDocument,
+  }) {
+    var query =
+        reference.orderBy('totalContainersPrice', descending: descending);
+
+    if (startAtDocument != null) {
+      query = query.startAtDocument(startAtDocument.snapshot);
+    }
+    if (startAfterDocument != null) {
+      query = query.startAfterDocument(startAfterDocument.snapshot);
+    }
+    if (endAtDocument != null) {
+      query = query.endAtDocument(endAtDocument.snapshot);
+    }
+    if (endBeforeDocument != null) {
+      query = query.endBeforeDocument(endBeforeDocument.snapshot);
+    }
+
+    if (startAt != _sentinel) {
+      query = query.startAt([startAt]);
+    }
+    if (startAfter != _sentinel) {
+      query = query.startAfter([startAfter]);
+    }
+    if (endAt != _sentinel) {
+      query = query.endAt([endAt]);
+    }
+    if (endBefore != _sentinel) {
+      query = query.endBefore([endBefore]);
+    }
+
+    return _$OrderQuery(query, _collection);
+  }
+
+  OrderQuery orderByContainersCount({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    OrderDocumentSnapshot? startAtDocument,
+    OrderDocumentSnapshot? endAtDocument,
+    OrderDocumentSnapshot? endBeforeDocument,
+    OrderDocumentSnapshot? startAfterDocument,
+  }) {
+    var query = reference.orderBy('containersCount', descending: descending);
+
+    if (startAtDocument != null) {
+      query = query.startAtDocument(startAtDocument.snapshot);
+    }
+    if (startAfterDocument != null) {
+      query = query.startAfterDocument(startAfterDocument.snapshot);
+    }
+    if (endAtDocument != null) {
+      query = query.endAtDocument(endAtDocument.snapshot);
+    }
+    if (endBeforeDocument != null) {
+      query = query.endBeforeDocument(endBeforeDocument.snapshot);
+    }
+
+    if (startAt != _sentinel) {
+      query = query.startAt([startAt]);
+    }
+    if (startAfter != _sentinel) {
+      query = query.startAfter([startAfter]);
+    }
+    if (endAt != _sentinel) {
+      query = query.endAt([endAt]);
+    }
+    if (endBefore != _sentinel) {
+      query = query.endBefore([endBefore]);
+    }
+
+    return _$OrderQuery(query, _collection);
+  }
+
+  OrderQuery orderByContainerPrice({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    OrderDocumentSnapshot? startAtDocument,
+    OrderDocumentSnapshot? endAtDocument,
+    OrderDocumentSnapshot? endBeforeDocument,
+    OrderDocumentSnapshot? startAfterDocument,
+  }) {
+    var query = reference.orderBy('containerPrice', descending: descending);
+
+    if (startAtDocument != null) {
+      query = query.startAtDocument(startAtDocument.snapshot);
+    }
+    if (startAfterDocument != null) {
+      query = query.startAfterDocument(startAfterDocument.snapshot);
+    }
+    if (endAtDocument != null) {
+      query = query.endAtDocument(endAtDocument.snapshot);
+    }
+    if (endBeforeDocument != null) {
+      query = query.endBeforeDocument(endBeforeDocument.snapshot);
+    }
+
+    if (startAt != _sentinel) {
+      query = query.startAt([startAt]);
+    }
+    if (startAfter != _sentinel) {
+      query = query.startAfter([startAfter]);
+    }
+    if (endAt != _sentinel) {
+      query = query.endAt([endAt]);
+    }
+    if (endBefore != _sentinel) {
+      query = query.endBefore([endBefore]);
+    }
+
+    return _$OrderQuery(query, _collection);
+  }
+
   @override
   bool operator ==(Object other) {
     return other is _$OrderQuery &&
@@ -1898,6 +2190,10 @@ Order _$OrderFromJson(Map<String, dynamic> json) => Order(
       updated_at: firestoreTimestampFromJson(json['updated_at']),
       user: OrderClientFromJson(json['user'] as Map<String, Object?>?),
       order: json['order'] as int?,
+      totalContainersPrice:
+          (json['totalContainersPrice'] as num?)?.toDouble() ?? 0,
+      containersCount: json['containersCount'] as int? ?? 0,
+      containerPrice: (json['containerPrice'] as num?)?.toDouble() ?? 0,
     );
 
 Map<String, dynamic> _$OrderToJson(Order instance) => <String, dynamic>{
@@ -1924,6 +2220,9 @@ Map<String, dynamic> _$OrderToJson(Order instance) => <String, dynamic>{
       'updated_at': firestoreTimestampToJson(instance.updated_at),
       'user': OrderClientToJson(instance.user),
       'order': instance.order,
+      'totalContainersPrice': instance.totalContainersPrice,
+      'containersCount': instance.containersCount,
+      'containerPrice': instance.containerPrice,
     };
 
 Restaurant _$RestaurantFromJson(Map<String, dynamic> json) => Restaurant(
@@ -1963,7 +2262,8 @@ Map<String, dynamic> _$OrderItemToJson(OrderItem instance) => <String, dynamic>{
 
 OrderClient _$OrderClientFromJson(Map<String, dynamic> json) => OrderClient(
       uid: json['uid'] as String,
-      address: AddressFromJson(json['address'] as Map<String, Object?>?),
+      address:
+          firestoreAddressFromJson(json['address'] as Map<String, Object?>?),
       email: json['email'] as String?,
       name: json['name'] as String?,
       phone: json['phone'] as String?,
@@ -1972,7 +2272,7 @@ OrderClient _$OrderClientFromJson(Map<String, dynamic> json) => OrderClient(
 Map<String, dynamic> _$OrderClientToJson(OrderClient instance) =>
     <String, dynamic>{
       'uid': instance.uid,
-      'address': AddressToJson(instance.address),
+      'address': firestoreAddressToJson(instance.address),
       'email': instance.email,
       'name': instance.name,
       'phone': instance.phone,
